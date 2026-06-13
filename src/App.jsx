@@ -2,9 +2,13 @@ import NavBar from "./components/NavBar";
 
 const App = () => {
     return (
-        <main>
-            <NavBar />
-        </main>
+        <header>
+            <nav>
+                <img src="/logo.svg" alt="Apple logo" />
+
+                
+            </nav>
+        </header>
     )
 }
 
