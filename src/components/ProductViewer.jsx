@@ -23,8 +23,13 @@ const ProductViewer = () => {
                         
                     </div>
                     <div className="size-control">
+                        <div 
+                        onClick={() => setScale(0.06)} 
+                        className={clsx(scale == 0.06 ? 'bg-white text-black' : 'bg-transparent text-white')} 
+                        >
+                        <p>14''</p>
+                        </div>
                         
-                        <div><p>16''</p></div>
                     </div>
                 </div>
             </div>
