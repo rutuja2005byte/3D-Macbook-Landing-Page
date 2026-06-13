@@ -1,4 +1,5 @@
 import useMacBookStore from "../store";
+import clsx from "clsx";
 
 const ProductViewer = () => {
     const {color, scale, setColor, setScale} = useMacBookStore();
@@ -15,10 +16,14 @@ const ProductViewer = () => {
                         onClick={() => setColor('#adb5bd')} 
                         className={clsx('bg-neutral-300', color == '#adb5bd' && 'active')} 
                         />
-                        <div className="bg-neutral-900" />
+                        <div 
+                        onClick={() => setColor('#2e2c2e')} 
+                        className={clsx('bg-neutral-900', color == '#2e2c2e' && 'active')} 
+                        />
+                        
                     </div>
                     <div className="size-control">
-                        <div><p>14''</p></div>
+                        
                         <div><p>16''</p></div>
                     </div>
                 </div>
