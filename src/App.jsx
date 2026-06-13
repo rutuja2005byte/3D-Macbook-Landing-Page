@@ -7,14 +7,7 @@ const App = () => {
                 <img src="/logo.svg" alt="Apple logo" />
 
                 <ul>
-                    {[
-                        {label: 'Store'},
-                        {label: 'Mac'},
-                        {label: 'iPhone'},
-                        {label: 'Watch'},
-                        {label: 'Vision'},
-                        {label: 'Airpods'},
-                    ].map(({ label }) => (
+                    {navLinks.map(({ label }) => (
                         <li key={label}>
                             <a href={label}>{label}</a>
                         </li>
