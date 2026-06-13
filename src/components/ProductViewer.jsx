@@ -1,5 +1,7 @@
 import useMacBookStore from "../store";
 import clsx from "clsx";
+import { Canvas } from "@react-three/fiber";
+import { Box } from "@react-three/drei";
 
 const ProductViewer = () => {
     const {color, scale, setColor, setScale} = useMacBookStore();
@@ -38,7 +40,9 @@ const ProductViewer = () => {
                     </div>
                 </div>
             </div>
-            <p className="text-white text-4xl">Render Canvas</p>
+            <Canvas id="canvas">
+                <Box position={[-1, 1, 0]} scale={10* scale}></Box>
+            </Canvas>
         </section>
     )
 }
