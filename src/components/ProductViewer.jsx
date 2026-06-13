@@ -41,7 +41,7 @@ const ProductViewer = () => {
                 </div>
             </div>
             <Canvas id="canvas">
-                <Box position={[-1, 1, 0]} scale={10* scale}></Box>
+                <Box position={[-1, 1, 0]} scale={10* scale} material-color={color} />
             </Canvas>
         </section>
     )
