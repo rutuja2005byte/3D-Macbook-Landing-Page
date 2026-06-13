@@ -1,3 +1,4 @@
+import React from "react";
 import { Environment, Lightformer, SpotLight } from "@react-three/drei";
 
 const StudioLights = () => {
