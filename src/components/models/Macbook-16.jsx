@@ -19,7 +19,7 @@ export default function MacBookModel16(props) {
         }
       }
     })
-  }, [color])
+  }, [color, scene])
 
   React.useEffect(() => {
     if (props.caseColor) {
