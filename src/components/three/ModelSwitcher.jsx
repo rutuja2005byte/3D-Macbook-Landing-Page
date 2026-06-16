@@ -18,6 +18,12 @@ const fadeMeshes = (group, opacity) => {
     })
 }
 
+const moveGroup = (group, x) => {
+    if(!group) return;
+
+    gsap.to(group.position, { x, duration: ANIMATION_DURATION})
+}
+
 const ModelSwitcher = ({ scale, isMobile }) => {
     const smallMacbookRef = useRef();
     const largeMacbookRef = useRef();
