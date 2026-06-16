@@ -4,7 +4,11 @@ const Hero  = () => {
     const videoRef = useRef();
 
     useEffect(() => {
-        if(videoRef.current) videoRef.current.playsInline = 2;
+        if(!videoRef.current) return;
+
+        videoRef.current.muted = true;
+        videoRef.current.playsInline = true;
+        videoRef.current.play().catch(() => {});
     }, []);
 
     return (
@@ -14,7 +18,15 @@ const Hero  = () => {
                 <img src="/title.png" alt="MacBook Title" />
             </div>
 
-            <video ref={videoRef} src="/videos/hero.mp4" autoPlay muted playsInline />
+            <video
+                ref={videoRef}
+                src="/videos/hero.mp4"
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="auto"
+            />
 
             <button>Buy</button>
 
