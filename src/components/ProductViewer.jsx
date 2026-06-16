@@ -1,34 +1,9 @@
 import useMacBookStore from "../store";
 import clsx from "clsx";
-import React, { useRef } from "react";
-import * as THREE from "three";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls } from "@react-three/drei";
-import MacBookModel14 from "./models/Macbook-14";
-import MacBookModel16 from "./models/Macbook-16";
+import { Canvas } from "@react-three/fiber";
 import StudioLights from "./three/Studio.Lights.jsx";
 import ModelSwitcher from "./three/ModelSwitcher.jsx";
 import { useMediaQuery } from "react-responsive";
-
-const MouseResponsiveGroup = ({ children, ...props }) => {
-    const groupRef = useRef();
-
-    useFrame((state) => {
-        if (groupRef.current) {
-            const targetY = state.pointer.x * 0.45;
-            const targetX = -state.pointer.y * 0.25;
-            
-            groupRef.current.rotation.y = THREE.MathUtils.lerp(groupRef.current.rotation.y, targetY, 0.08);
-            groupRef.current.rotation.x = THREE.MathUtils.lerp(groupRef.current.rotation.x, targetX, 0.08);
-        }
-    });
-
-    return (
-        <group ref={groupRef} {...props}>
-            {children}
-        </group>
-    );
-};
 
 const ProductViewer = () => {
     const {color, scale, setColor, setScale} = useMacBookStore();
