@@ -1,6 +1,8 @@
 import React, { useEffect } from 'react'
 import { useGLTF, useTexture } from '@react-three/drei'
 import useMacBookStore from '../../store/index.js';
+import { noChangeParts } from '../../constants/index.js';
+import { Color } from 'three';
 
 export default function MacbookModel14(props) {
   const { color } = useMacBookStore();
@@ -11,10 +13,12 @@ export default function MacbookModel14(props) {
   useEffect(() => {
     scene.traverse((child) => {
       if(child.isMesh) {
-        // cange color only if a part name is not noChangeParts
+        if(!noChangeParts.includes(child.name)) {
+          child.material.color = new Color(color);
+        }
       }
     })
-  })
+  }, [color])
 
   React.useEffect(() => {
     if (props.caseColor) {

@@ -1,10 +1,25 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useGLTF, useTexture } from '@react-three/drei'
+import useMacBookStore from '../../store/index.js';
+import { noChangeParts } from '../../constants/index.js';
+import { Color } from 'three';
+
 
 export default function MacBookModel16(props) {
-  const { nodes, materials } = useGLTF('/models/macbook-16-transformed.glb')
+  const { color } = useMacBookStore();
+  const { nodes, materials, scene } = useGLTF('/models/macbook-16-transformed.glb')
 
   const texture = useTexture('/screen.png')
+  
+  useEffect(() => {
+    scene.traverse((child) => {
+      if(child.isMesh) {
+        if(!noChangeParts.includes(child.name)) {
+          child.material.color = new Color(color);
+        }
+      }
+    })
+  }, [color])
 
   React.useEffect(() => {
     if (props.caseColor) {
