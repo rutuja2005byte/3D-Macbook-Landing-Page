@@ -25,7 +25,7 @@ const Showcase = () => {
     }, [isTablet])
 
     return (
-       <section id="showacase">
+       <section id="showcase">
             <div className="media">
                 <video src="/videos/game.mp4" loop muted autoplay playsInline />
                 <div className="mask">
