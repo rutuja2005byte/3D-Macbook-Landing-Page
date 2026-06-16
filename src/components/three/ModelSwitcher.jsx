@@ -1,77 +1,99 @@
-import { PresentationControls } from "@react-three/drei";
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
+import { useFrame } from "@react-three/fiber";
+import * as THREE from "three";
 import gsap from "gsap";
 import MacBookModel16 from "../models/Macbook-16";
 import MacbookModel14 from "../models/Macbook-14";
-import { useGSAP } from "@gsap/react";
 
-const ANIMATION_DURATION = 1;
-const OFFSET_DISTANCE = 5;
-
-const fadeMeshes = (group, opacity) => {
-    if(!group) return;
-
-    group.traverse((child) => {
-        if(child.isMesh) {
-            child.Material.transparent = true;
-            gsap.to(child.material, { opacity, duration:ANIMATION_DURATION})
-        }
-    })
-}
-
-const moveGroup = (group, x) => {
-    if(!group) return;
-
-    gsap.to(group.position, { x, duration: ANIMATION_DURATION})
-}
+const SLIDE_DISTANCE = 6;
+const SLIDE_DURATION = 0.8;
 
 const ModelSwitcher = ({ scale, isMobile }) => {
     const SCALE_LARGE_DESKTOP = 0.08;
     const SCALE_LARGE_MOBILE = 0.05;
+    const groupRef = useRef();
     const smallMacbookRef = useRef();
     const largeMacbookRef = useRef();
+    const previousModelRef = useRef(null);
 
-    const showLargeMacbook = scale == SCALE_LARGE_DESKTOP || scale == SCALE_LARGE_MOBILE;
+    const showLargeMacbook = scale === SCALE_LARGE_DESKTOP || scale === SCALE_LARGE_MOBILE;
+    const smallModelScale = isMobile ? 0.03 : 0.06;
+    const largeModelScale = isMobile ? SCALE_LARGE_MOBILE : SCALE_LARGE_DESKTOP;
 
-    useGSAP(() => {
-        if(showLargeMacbook) {
-            moveGroup(smallMacbookRef.current, -OFFSET_DISTANCE);
-            moveGroup(largeMacbookRef.current, 0);
+    useEffect(() => {
+        const smallGroup = smallMacbookRef.current;
+        const largeGroup = largeMacbookRef.current;
+        if (!smallGroup || !largeGroup) return;
 
-            moveGroup(smallMacbookRef.current, 0);
-            moveGroup(largeMacbookRef.current, 1);
-        }else{
-            moveGroup(smallMacbookRef.current, 0);
-            moveGroup(largeMacbookRef.current, OFFSET_DISTANCE);
+        const nextModel = showLargeMacbook ? "large" : "small";
+        const previousModel = previousModelRef.current;
 
-            moveGroup(smallMacbookRef.current, 1);
-            moveGroup(largeMacbookRef.current, 0);
+        if (!previousModel) {
+            smallGroup.position.x = showLargeMacbook ? -SLIDE_DISTANCE : 0;
+            largeGroup.position.x = showLargeMacbook ? 0 : SLIDE_DISTANCE;
+            smallGroup.visible = !showLargeMacbook;
+            largeGroup.visible = showLargeMacbook;
+            previousModelRef.current = nextModel;
+            return;
         }
-    }, [scale])
 
-    const controlsConfig = {
-        snap: true,
-        speed: 1,
-        zoom: 1,
-        azimuth: [-Infinity, Infinity],
-        config: {mass:1, tension: 0, friction:26}
-    }
+        if (previousModel === nextModel) return;
+
+        const incomingGroup = showLargeMacbook ? largeGroup : smallGroup;
+        const outgoingGroup = showLargeMacbook ? smallGroup : largeGroup;
+        const direction = showLargeMacbook ? 1 : -1;
+
+        gsap.killTweensOf([incomingGroup.position, outgoingGroup.position]);
+
+        incomingGroup.visible = true;
+        outgoingGroup.visible = true;
+        incomingGroup.position.x = SLIDE_DISTANCE * direction;
+
+        gsap.to(outgoingGroup.position, {
+            x: -SLIDE_DISTANCE * direction,
+            duration: SLIDE_DURATION,
+            ease: "power3.inOut",
+            onComplete: () => {
+                outgoingGroup.visible = false;
+            },
+        });
+
+        gsap.to(incomingGroup.position, {
+            x: 0,
+            duration: SLIDE_DURATION,
+            ease: "power3.inOut",
+        });
+
+        previousModelRef.current = nextModel;
+    }, [showLargeMacbook]);
+
+    useFrame((state) => {
+        if (!groupRef.current) return;
+
+        const targetY = state.pointer.x * 0.35;
+        const targetX = -state.pointer.y * 0.18;
+
+        groupRef.current.rotation.y = THREE.MathUtils.lerp(
+            groupRef.current.rotation.y,
+            targetY,
+            0.08
+        );
+        groupRef.current.rotation.x = THREE.MathUtils.lerp(
+            groupRef.current.rotation.x,
+            targetX,
+            0.08
+        );
+    });
 
     return (
-        <>
-        <PresentationControls {...controlsConfig}>
-            <group ref={largeMacbookRef}>
-                <MacBookModel16 scale={isMobile ? 0.05 : 0.08} />
-            </group>
-        </PresentationControls>
-        
-        <PresentationControls>
+        <group ref={groupRef}>
             <group ref={smallMacbookRef}>
-                <MacbookModel14 scale={isMobile ? 0.03 : 0.06} />
+                <MacbookModel14 scale={smallModelScale} />
             </group>
-        </PresentationControls>
-        </>
-        
+            <group ref={largeMacbookRef}>
+                <MacBookModel16 scale={largeModelScale} />
+            </group>
+        </group>
     )
 }
 
