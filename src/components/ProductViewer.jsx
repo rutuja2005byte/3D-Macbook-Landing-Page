@@ -80,7 +80,7 @@ const ProductViewer = () => {
                         <MacBookModel16 scale={scale} position={[0, 0, 0]} caseColor={color} />
                     )}
                 </MouseResponsiveGroup>
-                <ModelSwitcher scale={isMobile ? scale - 0.03 : scale} />
+                <ModelSwitcher scale={isMobile ? scale - 0.03 : scale} isMobile={isMobile} />
             </Canvas>
         </section>
     )
