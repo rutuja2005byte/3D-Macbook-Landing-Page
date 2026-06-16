@@ -39,9 +39,6 @@ const ProductViewer = () => {
             <h2>Take a closer look.</h2>
 
             <div className="controls">
-                <p>
-                    MacBook Pro {scale === 0.06 ? '14-inch' : '16-inch'} in {color === '#adb5bd' ? 'Silver' : 'Space Gray'}
-                </p>
 
                 <div className="flex-center gap-5 mt-5">
                     <div className="color-control">
