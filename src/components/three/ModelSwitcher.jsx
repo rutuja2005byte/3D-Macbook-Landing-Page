@@ -3,6 +3,7 @@ import { useRef } from "react";
 import gsap from "gsap";
 import MacBookModel16 from "../models/Macbook-16";
 import MacbookModel14 from "../models/Macbook-14";
+import { useGSAP } from "@gsap/react";
 
 const ANIMATION_DURATION = 1;
 const OFFSET_DISTANCE = 5;
@@ -29,6 +30,22 @@ const ModelSwitcher = ({ scale, isMobile }) => {
     const largeMacbookRef = useRef();
 
     const showLargeMacbook = scale == 0.08 || scale == 0.05;
+
+    useGSAP(() => {
+        if(showLargeMacbook) {
+            moveGroup(smallMacbookRef.current, -OFFSET_DISTANCE);
+            moveGroup(largeMacbookRef.current, 0);
+
+            moveGroup(smallMacbookRef.current, 0);
+            moveGroup(largeMacbookRef.current, 1);
+        }else{
+            moveGroup(smallMacbookRef.current, 0);
+            moveGroup(largeMacbookRef.current, OFFSET_DISTANCE);
+
+            moveGroup(smallMacbookRef.current, 1);
+            moveGroup(largeMacbookRef.current, 0);
+        }
+    }, [scale])
 
     const controlsConfig = {
         snap: true,
