@@ -6,7 +6,9 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
 import MacBookModel14 from "./models/Macbook-14";
 import MacBookModel16 from "./models/Macbook-16";
-import StudioLights from "./Studio.Lights.jsx";
+import StudioLights from "./three/Studio.Lights.jsx";
+import ModelSwitcher from "./three/ModelSwitcher.jsx";
+import { useMediaQuery } from "react-responsive";
 
 const MouseResponsiveGroup = ({ children, ...props }) => {
     const groupRef = useRef();
@@ -30,6 +32,8 @@ const MouseResponsiveGroup = ({ children, ...props }) => {
 
 const ProductViewer = () => {
     const {color, scale, setColor, setScale} = useMacBookStore();
+    const isMobile = useMediaQuery({ query: '(max-width: 1024px)'});
+
     return (
         <section id="product-viewer">
             <h2>Take a closer look.</h2>
@@ -76,7 +80,7 @@ const ProductViewer = () => {
                         <MacBookModel16 scale={scale} position={[0, 0, 0]} caseColor={color} />
                     )}
                 </MouseResponsiveGroup>
-                <OrbitControls makeDefault enableZoom={false} enablePan={false} rotateSpeed={0.6} />
+                <ModelSwitcher scale={isMobile ? scale - 0.03 : scale} />
             </Canvas>
         </section>
     )
