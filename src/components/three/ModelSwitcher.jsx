@@ -1,7 +1,22 @@
 import { PresentationControls } from "@react-three/drei";
 import { useRef } from "react";
+import gsap from "gsap";
 import MacBookModel16 from "../models/Macbook-16";
 import MacbookModel14 from "../models/Macbook-14";
+
+const ANIMATION_DURATION = 1;
+const OFFSET_DISTANCE = 5;
+
+const fadeMeshes = (group, opacity) => {
+    if(!group) return;
+
+    group.traverse((child) => {
+        if(child.isMesh) {
+            child.Material.transparent = true;
+            gsap.to(child.material, { opacity, duration:ANIMATION_DURATION})
+        }
+    })
+}
 
 const ModelSwitcher = ({ scale, isMobile }) => {
     const smallMacbookRef = useRef();
