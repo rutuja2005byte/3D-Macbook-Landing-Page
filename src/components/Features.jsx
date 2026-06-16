@@ -15,7 +15,22 @@ const ModelScroll = () => {
     const isMobile = useMediaQuery({ query: '(max-width: 1024px)'})
     const { setTexture } = useMacbookStore();
 
-    
+    // Pre-load all feature videos during component mount
+    useEffect(() => {
+        featureSequence.forEach((feature) => {
+            const v = document.createElement('video');
+
+            Object.assign(v, {
+                src: feature.videoPath,
+                muted: true,
+                playsInline: true,
+                preload: 'auto',
+                crossOrigin: 'anonymous',
+            });
+
+            v.load();
+        })
+    }, []);
 
     useGSAP(() => {
         // 3D MODEL ROTATION ANIMATION
